@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZEROBASEONE Photocard Catalogue</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Firebase CDN Scripts -->
+    <script type="module">
+        // Import the functions you need from Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, query, where, orderBy, deleteDoc, doc, addDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+        import { getStorage } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-storage.js";
+
+        // Your Firebase config object
+        const firebaseConfig = {
+            apiKey: "AIzaSyBjzwFpYLd5iqKqUOXne1zSibwN2XN1pqc",
+            authDomain: "jebecard-9e48d.firebaseapp.com",
+            projectId: "jebecard-9e48d",
+            storageBucket: "jebecard-9e48d.firebasestorage.app",
+            messagingSenderId: "986658878850",
+            appId: "1:986658878850:web:a3d577d260068a00f74b9b",
+            measurementId: "G-7RNPSLGCK0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const auth = getAuth(app);
+
+        // Firebase authentication check
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // If user is not authenticated, redirect to login page
+                window.location.href = "login.html";
+            }
+        });
+
+        // Store Firebase references for use in the rest of the app
+        window.db = db;
+        window.storage = storage;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>ZEROBASEONE Photocard Catalogue</h1>
+
+        <!-- Add New Photocard Form -->
+        <div class="add-photocard">
+            <h2>Add New Photocard</h2>
+            <form id="photocard-form">
+                <div class="form-group">
+                    <label for="image-url">Image URL:</label>
+                    <input type="text" id="image-url" required>
+                </div>
+                <div class="form-group">
+                    <label for="member">Member:</label>
+                    <select id="member" required>
+                        <option value="Kim Ji Woong">Kim Ji Woong</option>
+                        <option value="Zhang Hao">Zhang Hao</option>
+                        <option value="Sung Han Bin">Sung Han Bin</option>
+                        <option value="Seok Matthew">Seok Matthew</option>
+                        <option value="Kim Tae Rae">Kim Tae Rae</option>
+                        <option value="Ricky">Ricky</option>
+                        <option value="Kim Gyu Vin">Kim Gyu Vin</option>
+                        <option value="Park Gun Wook">Park Gun Wook</option>
+                        <option value="Han Yu Jin">Han Yu Jin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="album">Album:</label>
+                    <select id="album" required>
+                        <option value="Youth In The Shade">Youth In The Shade</option>
+                        <option value="Melting Point">Melting Point</option>
+                        <option value="Yura Yura">Yura Yura</option>
+                        <option value="You Had Me at Hello">You Had Me at Hello</option>
+                        <option value="Cinema Paradise">Cinema Paradise</option>
+                        <option value="Prezent">Prezent</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event">Event:</label>
+                    <input type="text" id="event" required>
+                </div>
+                <button type="submit">Add Photocard</button>
+            </form>
+        </div>
+
+        <!-- Photocard Filters -->
+        <div class="filters">
+            <input type="text" id="search-input" placeholder="Search..." />
+            <select id="filter-member">
+                <option value="">Filter by member</option>
+                <option value="Kim Ji Woong">Kim Ji Woong</option>
+                <option value="Zhang Hao">Zhang Hao</option>
+                <option value="Sung Han Bin">Sung Han Bin</option>
+                <option value="Seok Matthew">Seok Matthew</option>
+                <option value="Kim Tae Rae">Kim Tae Rae</option>
+                <option value="Ricky">Ricky</option>
+                <option value="Kim Gyu Vin">Kim Gyu Vin</option>
+                <option value="Park Gun Wook">Park Gun Wook</option>
+                <option value="Han Yu Jin">Han Yu Jin</option>
+            </select>
+            <select id="filter-album">
+                <option value="">Filter by album</option>
+                <option value="Youth In The Shade">Youth In The Shade</option>
+                <option value="Melting Point">Melting Point</option>
+                <option value="Yura Yura">Yura Yura</option>
+                <option value="You Had Me at Hello">You Had Me at Hello</option>
+                <option value="Cinema Paradise">Cinema Paradise</option>
+                <option value="Prezent">Prezent</option>
+            </select>
+            <select id="sort-by">
+                <option value="recently-added">Sort by: Recently Added</option>
+                <option value="price">Sort by: Price</option>
+            </select>
+            <select id="sort-order">
+                <option value="desc">Descending</option>
+                <option value="asc">Ascending</option>
+            </select>
+        </div>
+
+        <!-- Photocard Grid -->
+        <div id="photocard-grid"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <!-- (These have been removed since you're using the 'module' scripts) -->
+
+    <!-- Your custom JavaScript file -->
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Login to Your Account</h1>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="registration.html">Sign up here</a></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+        // Firebase configuration (ensure this is the correct one from Firebase Console)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBjzwFpYLd5iqKqUOXne1zSibwN2XN1pqc",
+            authDomain: "jebecard-9e48d.firebaseapp.com",
+            projectId: "jebecard-9e48d",
+            storageBucket: "jebecard-9e48d.firebasestorage.app",
+            messagingSenderId: "986658878850",
+            appId: "1:986658878850:web:a3d577d260068a00f74b9b",
+            measurementId: "G-7RNPSLGCK0"
+        };
+
+        // Initialize Firebase with the correct configuration
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app); // Initialize Firebase Auth
+
+        // Handle login form submission
+        const loginForm = document.getElementById("login-form");
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent page reload on submit
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                // Sign in the user
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                console.log("User logged in successfully!", userCredential);
+
+                // Redirect to main page after successful login
+                window.location.href = "index.html"; // Redirect to index.html after successful login
+            } catch (error) {
+                alert("Error: " + error.message); // Show error message
+            }
+        });
+    </script>
+</body>
+</html>

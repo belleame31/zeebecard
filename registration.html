@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Create Your Account</h1>
+        <form id="sign-up-form">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <!-- Success/Error Message -->
+        <div id="status-message" style="margin-top: 10px; font-weight: bold;"></div> <!-- Initially empty -->
+
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBjzwFpYLd5iqKqUOXne1zSibwN2XN1pqc",
+            authDomain: "jebecard-9e48d.firebaseapp.com",
+            projectId: "jebecard-9e48d",
+            storageBucket: "jebecard-9e48d.firebasestorage.app",
+            messagingSenderId: "986658878850",
+            appId: "1:986658878850:web:a3d577d260068a00f74b9b",
+            measurementId: "G-7RNPSLGCK0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Handle sign-up form submission
+        const signUpForm = document.getElementById("sign-up-form");
+        const statusMessageDiv = document.getElementById("status-message");
+
+        signUpForm.addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent page reload on submit
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            statusMessageDiv.textContent = ""; // Clear any previous message
+
+            try {
+                // Create the user
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                console.log("Account created successfully!", userCredential);
+
+                // Display success message
+                statusMessageDiv.style.color = "green"; // Change text color to green
+                statusMessageDiv.textContent = "Account created successfully! You can now log in.";
+
+                // Optionally, redirect the user after a brief message delay
+                setTimeout(() => {
+                    window.location.href = "login.html"; // Redirect to login page after successful sign-up
+                }, 2000); // Delay of 2 seconds for the user to see the success message
+
+            } catch (error) {
+                console.error("Error code:", error.code);
+                console.error("Error message:", error.message);
+
+                // Display error message
+                statusMessageDiv.style.color = "red"; // Change text color to red
+                statusMessageDiv.textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
